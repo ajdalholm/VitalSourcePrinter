@@ -48,12 +48,12 @@ def main():
 
     while(True):
         try:
-            RomanStart = "i"
+            RomanStart = input("Roman Numeral Start (or 'No'): ")
             if RomanStart == 'No' or RomanStart == 'no':
                 print("")
                 break
             elif roman_to_int(RomanStart.upper()):
-                RomanEnd = "xxii"
+                RomanEnd = input("Roman Numeral End (If one page enter same page as first): ").upper()
                 if (roman_to_int(RomanStart.upper())) > (roman_to_int(RomanEnd.upper())):
                     print("\nFirst page must be less than last page.\n")
                     continue
@@ -80,8 +80,8 @@ def main():
 
     while(True):
         try:
-            NumberStart = 1
-            NumberEnd = 778
+            NumberStart = int(input("First page: "))
+            NumberEnd = int(input("Last page: "))
             if (type(NumberStart) != int) or (type(NumberStart) != int):
                 print("Please enter valid numbers.\n")
                 continue
@@ -106,7 +106,6 @@ def main():
     root.focus_force()
     # credits to http://stackoverflow.com/questions/3375227/how-to-give-tkinter-file-dialog-focus
 
-    print("choose path")
     filedir = filedialog.askdirectory() + '//'
 
     if len(NumberList)%2 != 0 :
@@ -116,7 +115,7 @@ def main():
         if roman_to_int(RomanEnd.upper()):
             if len(RomanBookList)%2 != 0 :  #ugly coding, but it gets the job done
                 RomanBookList += [ RomanBookList[-1] ]
-    print(RomanBookList)            
+                
     print("\nClick on the active VitalSource window to get started.\nThe program will start in: 8")
     for seconds in range(8):
         time.sleep(1)
@@ -130,42 +129,30 @@ def main():
         PageEntry1 = RomanBookList[0]
         PageEntry2 = RomanBookList[1]
                             
-        #pyautogui.hotkey('ctrl', 'p', interval = 0.1)
-        #time.sleep(3)
-        #pyautogui.press(keys = 'tab', presses = 3)
-        #pyautogui.press('delete', 5)
-        #pyautogui.typewrite(PageEntry1)
-        #pyautogui.press('tab')
-        #pyautogui.press('delete', 5)
-        #pyautogui.typewrite(PageEntry1)
-        #pyautogui.typewrite(['tab', 'tab', 'enter'])
-        #time.sleep(3)
-        #pyautogui.press('enter')
-        #time.sleep(3)
-        #pyautogui.typewrite("Ebook")
-        #pyautogui.press('enter')
-        #time.sleep(2)
+        pyautogui.hotkey('ctrl', 'p')
+        pyautogui.press(keys = 'tab', presses = 2, interval = 0.25)
+        pyautogui.press('delete', 5)
+        pyautogui.typewrite(PageEntry1)
+        pyautogui.press('tab')
+        pyautogui.press('delete', 5)
+        pyautogui.typewrite(PageEntry2)
+        pyautogui.typewrite(['tab', 'tab', 'enter', 'enter'], interval = 0.25 )
+        pyautogui.typewrite("Ebook", interval = 0.50)
+        pyautogui.press('enter', interval = 0.5)
+        time.sleep(0.25)
 
-        for page in range(0, len(RomanBookList), 1):
-                print("Page: " + str(page) + ' of ' + str(len(RomanBookList) ))
-                if os.path.isfile(filedir + "Ebook.pdf") != True:
-                    Filename = "Ebook"
-                else:
-                    Filename = "File2"
-                print("about to print page: " + str(page) + "\nNew file will be named: " + Filename)
-                #time.sleep(30)
-                pyautogui.hotkey('alt','shift','p')
-                time.sleep(5)
-                pyautogui.typewrite(RomanBookList[page], interval = 0.2)
-                pyautogui.press(['tab','enter'])
-                time.sleep(5)
-                pyautogui.hotkey('ctrl', 'p')
-                time.sleep(3)
-                pyautogui.press('enter')
-                time.sleep(3)
-                pyautogui.press('enter')
-                pyautogui.typewrite(Filename)
-                pyautogui.press('enter')
+        print("Page: " + '1' + ' of ' + str(len(RomanBookList) ))
+        for page in range(2, len(RomanBookList), 2):
+                pyautogui.hotkey('ctrl', 'p', interval = 0.25)
+                pyautogui.press('tab', 2, interval = 0.25)
+                pyautogui.press('delete', 6, interval = 0.25)
+                pyautogui.typewrite(RomanBookList[page], interval = 0.25)
+                pyautogui.press('tab', interval = 0.25)
+                pyautogui.press('delete', 6, interval = 0.25)
+                pyautogui.typewrite(RomanBookList[page + 1])
+                pyautogui.typewrite(['tab', 'tab', 'enter', 'enter'], interval = 0.75)
+                pyautogui.typewrite("File2", interval = 0.5)
+                pyautogui.press('enter', interval = 0.5)
                 while (os.path.isfile(filedir + "Ebook.pdf") != True):
                     time.sleep(2)
                 while (os.path.isfile(filedir + "File2.pdf") != True):
@@ -207,7 +194,7 @@ def main():
                 os.remove(filedir + 'Ebook.pdf')
                 os.remove(filedir + 'File2.pdf')
                 os.rename(filedir + 'Ebook1.pdf', filedir + 'Ebook.pdf')
-                print("Page: " + str(page + 2) + ' of ' + str(len(RomanBookList)))
+                print("Page: " + str(page + 2) + ' of ' + str(len(RomanBookList)))         
         print("\nRoman Numerals Done\n")
 
     else:
